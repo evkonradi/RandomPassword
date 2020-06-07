@@ -50,7 +50,7 @@ var charactersType = function(objCharType){
         break;
     }
 
-    promptMessage = "Please enter a valid combination of characters you would like in the password: l(lowercase), u(uppercase), n(numeric), s(special characters). <br /> Example: 'nul' for numeric, upper and lower case. )!";
+    promptMessage = "Please enter a valid combination of characters you would like in the password: l(lowercase), u(uppercase), n(numeric), s(special characters)." +  "\r\n" + "Example: 'nul' for numeric, upper and lower case. )!";
     for(var propertyCharType in objCharType)
       propertyCharType = false;
   }
@@ -72,6 +72,18 @@ var generatePassword = function(){
     charSpecial: false
   };
   charactersType(objCharType);
+  var includeChar = "";
+  if (objCharType.charLowerCase) includeChar+= "\r\n" + "lower case";
+  if (objCharType.charUpperCase) includeChar+= "\r\n" + "upper case";
+  if (objCharType.charNumeric) includeChar+= "\r\n" + "numeric";
+  if (objCharType.charSpecial) includeChar+= "\r\n" + "special";
+  
+  var promptConfirm = confirm("You selected the following criteria to generate a password:" + "\r\n\r\n" + "Password Length: " + prdLength.toString() + "\r\n\r\n" + "Included characters: " + includeChar );
+  
+  // generate password
+  if (promptConfirm){ 
+
+  }
 
 
   return stringPassword;
