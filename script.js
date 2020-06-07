@@ -56,11 +56,25 @@ var charactersType = function(objCharType){
   }
 }
 
+// randomly generate one character out of the specified list of characters and put it in a random place in the password string
+var generateOneCharInPwd = function(strRandomPassword, strOfChars){
+  while (true){
+    var charToReplaceWith = strOfChars.charAt(Math.floor(Math.random() * strOfChars.length));
+    var indexToReplaceAt = Math.floor(Math.random() * strRandomPassword.length);
+    if (strRandomPassword[indexToReplaceAt] === " "){
+      strRandomPassword = strRandomPassword.substr(0,indexToReplaceAt) + charToReplaceWith + strRandomPassword.substr(indexToReplaceAt+1);
+      break;
+    }
+  }
+
+  return strRandomPassword;
+}
+
 // Generate Random Password function
 var generatePassword = function(){
 
   // prompt for the Password Length
-  var prdLength = promptPwdLength();
+  var pwdLength = promptPwdLength();
 
   //prompt for character types
   var objCharType = {
@@ -78,10 +92,10 @@ var generatePassword = function(){
   if (objCharType.charNumeric) includeChar+= "\r\n" + "numeric";
   if (objCharType.charSpecial) includeChar+= "\r\n" + "special";
   
-  var promptConfirm = confirm("You selected the following criteria to generate a password:" + "\r\n\r\n" + "Password Length: " + prdLength.toString() + "\r\n\r\n" + "Included characters: " + includeChar );
+  var promptConfirm = confirm("You selected the following criteria to generate a password:" + "\r\n\r\n" + "Password Length: " + pwdLength.toString() + "\r\n\r\n" + "Included characters: " + includeChar );
   
-    // generate password
-  var strRandomPassword = "";
+  // generate password
+  var strRandomPassword = new Array(pwdLength + 1).join(" "); // generate a string of password length filled with spaces
   if (promptConfirm){
     var strUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     var strLower = "abcdefghijklmnopqrstuvwxyz";
@@ -89,17 +103,27 @@ var generatePassword = function(){
     var strSpecial = "~!@#$%^&*()_+-=[]\\{}|;:\'\",./<>?";
   
     var charToUse = "";
-    if (objCharType.charUpperCase) 
+    if (objCharType.charUpperCase){
       charToUse+=strUpper;
-    if (objCharType.charLowerCase) 
+      strRandomPassword = generateOneCharInPwd(strRandomPassword, strUpper); // make sure at least one character in the password is Upper case
+    }
+    if (objCharType.charLowerCase){
       charToUse+=strLower;
-    if (objCharType.charNumeric) 
+      strRandomPassword = generateOneCharInPwd(strRandomPassword, strLower); // make sure at least one character in the password is Lower case
+    }
+    if (objCharType.charNumeric){
       charToUse+=strNumber;
-    if (objCharType.charSpecial) 
+      strRandomPassword = generateOneCharInPwd(strRandomPassword, strNumber); // make sure at least one character in the password is Number
+    }
+    if (objCharType.charSpecial){
       charToUse+=strSpecial;
-  
-    for (i = 0; i < prdLength; i++){
-      strRandomPassword += charToUse.charAt(Math.floor(Math.random() * charToUse.length));
+      strRandomPassword = generateOneCharInPwd(strRandomPassword, strSpecial); // make sure at least one character in the password is special character
+    }
+
+    //set all other characters in the password string to randomly selected characters
+    for (i = 0; i < pwdLength; i++){
+      if (strRandomPassword.charAt(i) === " ")
+        strRandomPassword = strRandomPassword.substr(0,i) + charToUse.charAt(Math.floor(Math.random() * charToUse.length)) + strRandomPassword.substr(i+1);
     }
   }
 
