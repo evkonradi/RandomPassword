@@ -56,10 +56,8 @@ var charactersType = function(objCharType){
   }
 }
 
-
 // Generate Random Password function
 var generatePassword = function(){
-  var stringPassword = "";
 
   // prompt for the Password Length
   var prdLength = promptPwdLength();
@@ -72,6 +70,8 @@ var generatePassword = function(){
     charSpecial: false
   };
   charactersType(objCharType);
+
+  //confirmation of user selection
   var includeChar = "";
   if (objCharType.charLowerCase) includeChar+= "\r\n" + "lower case";
   if (objCharType.charUpperCase) includeChar+= "\r\n" + "upper case";
@@ -80,13 +80,30 @@ var generatePassword = function(){
   
   var promptConfirm = confirm("You selected the following criteria to generate a password:" + "\r\n\r\n" + "Password Length: " + prdLength.toString() + "\r\n\r\n" + "Included characters: " + includeChar );
   
-  // generate password
-  if (promptConfirm){ 
-
+    // generate password
+  var strRandomPassword = "";
+  if (promptConfirm){
+    var strUpper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var strLower = "abcdefghijklmnopqrstuvwxyz";
+    var strNumber = "0123456789";
+    var strSpecial = "~!@#$%^&*()_+-=[]\\{}|;:\'\",./<>?";
+  
+    var charToUse = "";
+    if (objCharType.charUpperCase) 
+      charToUse+=strUpper;
+    if (objCharType.charLowerCase) 
+      charToUse+=strLower;
+    if (objCharType.charNumeric) 
+      charToUse+=strNumber;
+    if (objCharType.charSpecial) 
+      charToUse+=strSpecial;
+  
+    for (i = 0; i < prdLength; i++){
+      strRandomPassword += charToUse.charAt(Math.floor(Math.random() * charToUse.length));
+    }
   }
 
-
-  return stringPassword;
+  return strRandomPassword;
 }
 
 
