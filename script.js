@@ -62,7 +62,7 @@ var generatePassword = function(){
   var stringPassword = "";
 
   // prompt for the Password Length
-//  var prdLength = promptPwdLength();
+  var prdLength = promptPwdLength();
 
   //prompt for character types
   var objCharType = {
